@@ -4,32 +4,61 @@ version '1.0-SNAPSHOT'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral() // Replace jcenter() with mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        // !!! IMPORTANT: Update Android Gradle Plugin version here !!!
+        // For compileSdkVersion 35, you'll need AGP 8.1.0 or newer.
+        // Let's try 8.1.0, which is commonly used with API 34/35.
+        classpath 'com.android.tools.build:gradle:8.1.0'
+        // You might also need to explicitly add a Kotlin plugin if it uses Kotlin
+        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0" // Check your main project's build.gradle for Kotlin version
     }
 }
 
-rootProject.allprojects {
+allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral() // Replace jcenter() with mavenCentral()
     }
 }
 
 apply plugin: 'com.android.library'
+// If this library uses Kotlin, uncomment and apply the Kotlin plugin
+// apply plugin: 'kotlin-android'
 
 android {
-    namespace "pt.tribeiro.flutter_plugin_pdf_viewer"
-    compileSdkVersion 28
+    namespace "pt.tribeiro.flutter_plugin_pdf_viewer" // Keep this, it's good.
+
+    // !!! IMPORTANT: Update compileSdkVersion here !!!
+    compileSdkVersion 35 // Match your main project's compileSdkVersion
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 21 // You can keep this or increase if needed by the library itself
+        targetSdkVersion 35 // Set targetSdkVersion to match compileSdkVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
         disable 'InvalidPackage'
     }
+
+    // Add compileOptions for Java 1.8 compatibility if not already present.
+    // This is common for modern Android/Flutter builds.
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // If the library uses Kotlin, add kotlinOptions
+    // kotlinOptions {
+    //     jvmTarget = '1.8'
+    // }
 }
+
+// Ensure there's a dependencies block for the library itself if it has any.
+// You might need to add specific AndroidX dependencies if they cause issues.
+// dependencies {
+//    implementation "androidx.core:core-ktx:1.13.1" // Example, adjust version as needed
+//    implementation "androidx.appcompat:appcompat:1.7.0" // Example, adjust version as needed
+// }
